@@ -1,5 +1,6 @@
 package com.example.demo.common.infrastructure;
 
+import com.example.demo.common.parser.Parser;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -11,12 +12,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class QueryMethodCache {
 
+  private final Parser parser;
   private final Map<Class<? extends MyJpaRepository>, Queries> queryCacheMap;
 
-  public QueryMethodCache() {
+  public QueryMethodCache(Parser parser) {
     Set<Class<? extends MyJpaRepository>> subTypes = new Reflections(
         "com.example.demo").getSubTypesOf(MyJpaRepository.class);
 
+    this.parser = parser;
     this.queryCacheMap = subTypes.stream()
         .collect(Collectors.toMap(subType -> subType, this::createQueries));
   }
@@ -31,12 +34,13 @@ public class QueryMethodCache {
 
   private Queries createQueries(Class<? extends MyJpaRepository> clazz){
     List<Query> queryList = Arrays.stream(clazz.getMethods())
-        .map(method -> createQuery(method.getName())).toList();
+        .map(method -> createQuery(method.getName(), method.getParameterTypes())).toList();
     return new Queries(queryList);
   }
 
-  private Query createQuery(String methodName){
-    return new Query(methodName, "");
+  private Query createQuery(String methodName, Class<?>[] parameterTypes){
+    String queryStr = parser.parse(methodName, parameterTypes);
+    return new Query(methodName, queryStr);
   }
 
 }
