@@ -1,12 +1,7 @@
 package com.example.demo.common.infrastructure;
 
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
-@Getter
-@AllArgsConstructor
-public class Queries{
+public record Queries(List<Query> queryList) {
 
-  private  final List<Query> queryList;
 }

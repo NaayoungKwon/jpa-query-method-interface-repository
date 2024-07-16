@@ -32,8 +32,8 @@ public class QueryMethodCacheTest {
   void checkUserRepositoryMethods(){
     Queries queries = queryMethodCache.getCache(UserRepository.class);
 
-    assertThat(queries.getQueryList()).isNotEmpty();
-    assertThat(queries.getQueryList().get(0).query()).isEqualTo("select * from user");
+    assertThat(queries.queryList()).isNotEmpty();
+    assertThat(queries.queryList().get(0).query()).isEqualTo("select * from user");
   }
 
 }
