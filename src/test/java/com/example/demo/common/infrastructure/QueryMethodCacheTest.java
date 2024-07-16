@@ -2,6 +2,7 @@ package com.example.demo.common.infrastructure;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.example.demo.common.parser.FakeParser;
 import com.example.demo.user.infrastructure.UserRepository;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +15,7 @@ public class QueryMethodCacheTest {
 
   @BeforeEach
   void init() {
-    queryMethodCache = new QueryMethodCache();
+    queryMethodCache = new QueryMethodCache(new FakeParser());
   }
 
   @Test
@@ -32,7 +33,7 @@ public class QueryMethodCacheTest {
     Queries queries = queryMethodCache.getCache(UserRepository.class);
 
     assertThat(queries.getQueryList()).isNotEmpty();
-
+    assertThat(queries.getQueryList().get(0).query()).isEqualTo("select * from user");
   }
 
 }
