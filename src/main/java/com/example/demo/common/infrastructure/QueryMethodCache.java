@@ -1,7 +1,10 @@
 package com.example.demo.common.infrastructure;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.reflections.Reflections;
 import org.springframework.stereotype.Component;
 
@@ -13,15 +16,27 @@ public class QueryMethodCache {
   public QueryMethodCache() {
     Set<Class<? extends MyJpaRepository>> subTypes = new Reflections(
         "com.example.demo").getSubTypesOf(MyJpaRepository.class);
-    this.queryCacheMap = null;
+
+    this.queryCacheMap = subTypes.stream()
+        .collect(Collectors.toMap(subType -> subType, this::createQueries));
   }
 
   public  Map<Class<? extends MyJpaRepository>, Queries> getCaches(){
-    return null;
+    return this.queryCacheMap;
   }
 
   public Queries getCache(Class<? extends MyJpaRepository> clazz){
-    return null;
+    return this.queryCacheMap.get(clazz);
+  }
+
+  private Queries createQueries(Class<? extends MyJpaRepository> clazz){
+    List<Query> queryList = Arrays.stream(clazz.getMethods())
+        .map(method -> createQuery(method.getName())).toList();
+    return new Queries(queryList);
+  }
+
+  private Query createQuery(String methodName){
+    return new Query(methodName, "");
   }
 
 }

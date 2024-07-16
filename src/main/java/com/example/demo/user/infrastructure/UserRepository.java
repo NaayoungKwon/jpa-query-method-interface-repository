@@ -4,4 +4,6 @@ import com.example.demo.common.infrastructure.MyJpaRepository;
 
 public interface UserRepository extends MyJpaRepository<Long, User> {
 
+  User findByUsername(String username);
+
 }
