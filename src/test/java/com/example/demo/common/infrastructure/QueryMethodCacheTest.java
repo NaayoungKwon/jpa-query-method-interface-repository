@@ -33,7 +33,7 @@ public class QueryMethodCacheTest {
     Queries queries = queryMethodCache.getCache(UserRepository.class).get();
 
     assertThat(queries.queryList()).isNotEmpty();
-    assertThat(queries.queryList().get(0).query()).isEqualTo("select * from user");
+    assertThat(queries.queryList().get(0).query()).isEqualTo("select * from user where username = %s");
   }
 
 }

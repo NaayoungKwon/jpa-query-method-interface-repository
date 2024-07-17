@@ -5,6 +5,6 @@ public class FakeParser implements Parser {
 
   @Override
   public String parse(String methodName, Class<?>[] parameterTypes) {
-    return "select * from user";
+    return "select * from user where username = %s";
   }
 }
