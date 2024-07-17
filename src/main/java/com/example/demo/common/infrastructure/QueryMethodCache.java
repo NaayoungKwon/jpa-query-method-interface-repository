@@ -4,6 +4,7 @@ import com.example.demo.common.parser.Parser;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.reflections.Reflections;
@@ -28,8 +29,8 @@ public class QueryMethodCache {
     return this.queryCacheMap;
   }
 
-  public Queries getCache(Class<? extends MyJpaRepository> clazz){
-    return this.queryCacheMap.get(clazz);
+  public Optional<Queries> getCache(Class<? extends MyJpaRepository> clazz){
+    return Optional.ofNullable(this.queryCacheMap.get(clazz));
   }
 
   private Queries createQueries(Class<? extends MyJpaRepository> clazz){

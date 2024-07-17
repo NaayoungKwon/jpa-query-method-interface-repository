@@ -30,7 +30,7 @@ public class QueryMethodCacheTest {
   @Test
   @DisplayName("UserRepository에 정의한 메소드들이 있는지 확인한다.")
   void checkUserRepositoryMethods(){
-    Queries queries = queryMethodCache.getCache(UserRepository.class);
+    Queries queries = queryMethodCache.getCache(UserRepository.class).get();
 
     assertThat(queries.queryList()).isNotEmpty();
     assertThat(queries.queryList().get(0).query()).isEqualTo("select * from user");
