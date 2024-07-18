@@ -29,30 +29,28 @@ public class QueryMethodAdvice implements MethodInterceptor {
       return null;
     }
 
-    Class<? extends MyJpaRepository> declaringClass = (Class<? extends MyJpaRepository>) method.getDeclaringClass();
-    Optional<Queries> queriesOptional = queryMethodCache.getCache(declaringClass);
-    if(queriesOptional.isEmpty()){
-      log.error("Scan 되지 않은 Class입니다. class : {}", declaringClass.getName());
-      return null;
-    }
-
-    String finalQuery = queriesOptional.get().queryList().stream()
-        .filter(query -> query.method().equals(method.getName()))
-        .findFirst()
-        .map(Query::query)
-        .map(query -> mergeParams(query, invocation.getArguments()))
+    String finalQuery = getQueriesFromRepository(method)
+        .map(query -> query.mergeToParam(invocation.getArguments()))
         .orElse(null);
     log.info("query : {}", finalQuery);
 
     return method.getReturnType().getConstructor().newInstance();
   }
 
+  private Optional<Query> getQueriesFromRepository(Method method) {
+    Class<? extends MyJpaRepository> declaringClass = (Class<? extends MyJpaRepository>) method.getDeclaringClass();
+
+    Queries queries = queryMethodCache.getCache(declaringClass).orElseThrow(() -> {
+      log.error("Scan 되지 않은 Class입니다. class : {}", declaringClass.getName());
+      return new RuntimeException("Scan 되지 않은 Class입니다. class : " + declaringClass.getName());
+    });
+
+     return queries.getQueryByMethod(method.getName());
+  }
+
   private boolean isNotMyJpaRepository(Method method){
     return !Set.of(method.getDeclaringClass().getInterfaces()).contains(MyJpaRepository.class);
   }
 
-  private String mergeParams(String rawQuery, Object[] args){
-    return String.format(rawQuery, args);
-  }
 
 }
