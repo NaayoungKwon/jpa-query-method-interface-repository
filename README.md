@@ -9,6 +9,11 @@
 - MyJpaRepository를 상속한 Repository Interface의 Method에 해당하는 Query 생성.
 - Repository method 호출 시 Proxy 객체가 가로채서 동작.
 
+### 동작
+
+- Repositroy Interface에 정의한 메소드를 실행하여 원하는 쿼리가 생성되었는지 확인
+![](https://github.com/user-attachments/assets/d03e0d6a-01f1-4590-9e10-815303af01c5)
+
 ### Principle
 1. MyJpaRepository를 상속한 Repository의 Method를 파싱하여 PrepareStatement Query 생성한다. 
 2. Query는 인자 부분을 남겨두고 캐싱해둔다. 
