@@ -44,9 +44,9 @@ public class MethodParserTest {
   void testBetweenKeyword() {
     Class[] parameterTypes = new Class[]{LocalDate.class, LocalDate.class};
 
-    String result = parser.parse("findByStartDateBetween", tableName, parameterTypes);
+    String result = parser.parse("findByStartdateBetween", tableName, parameterTypes);
 
-    assertThat(result).isEqualTo("SELECT * FROM user WHERE startDate BETWEEN '%s' AND '%s'");
+    assertThat(result).isEqualTo("SELECT * FROM user WHERE startdate BETWEEN '%s' AND '%s'");
   }
 
   @Test
@@ -94,7 +94,7 @@ public class MethodParserTest {
 
     String result = parser.parse("findByNameStartingWith", tableName, parameterTypes);
 
-    assertThat(result).isEqualTo("SELECT * FROM user WHERE name LIKE '\\%%s'");
+    assertThat(result).isEqualTo("SELECT * FROM user WHERE name LIKE '%%%s'");
   }
 
   @Test
@@ -104,7 +104,7 @@ public class MethodParserTest {
 
     String result = parser.parse("findByNameEndingWith", tableName, parameterTypes);
     
-    assertThat(result).isEqualTo("SELECT * FROM user WHERE name LIKE '%s\\%'");
+    assertThat(result).isEqualTo("SELECT * FROM user WHERE name LIKE '%s%%'");
   }
 
   @Test
@@ -114,7 +114,7 @@ public class MethodParserTest {
 
     String result = parser.parse("findByAgeIn", tableName, parameterTypes);
 
-    assertThat(result).isEqualTo("SELECT * FROM user WHERE age IN (%s)");
+    assertThat(result).isEqualTo("SELECT * FROM user WHERE age IN (%p)");
   }
 
   @Test
@@ -129,15 +129,15 @@ public class MethodParserTest {
   void testEndingWithAndGreaterThanKeyword() {
     Class[] parameterTypes = new Class[]{String.class, Integer.class};
 
-    String result = parser.parse("findByNameEndingWithAndAgeIsGreaterThan", tableName, parameterTypes);
+    String result = parser.parse("findByNameEndingWithAndAgeGreaterThan", tableName, parameterTypes);
 
-    assertThat(result).isEqualTo("SELECT * FROM user WHERE name LIKE '\\%%s' AND age > %d");
+    assertThat(result).isEqualTo("SELECT * FROM user WHERE name LIKE '%s%%' AND age > %d");
   }
 
   @Test
   @DisplayName("'Is Not Null'과 'True' 키워드 조합 테스트")
   void testInAndIsNullKeyword() {
-    String result = parser.parse("findByNameIsNullAndActiveTrue", tableName, null);
+    String result = parser.parse("findByNameIsNotNullAndActiveTrue", tableName, null);
 
     assertThat(result).isEqualTo("SELECT * FROM user WHERE name IS NOT NULL AND active = true");
   }

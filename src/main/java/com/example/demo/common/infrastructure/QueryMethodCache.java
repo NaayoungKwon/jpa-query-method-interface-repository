@@ -35,7 +35,7 @@ public class QueryMethodCache {
 
   private Queries createQueries(Class<? extends MyJpaRepository> clazz){
     List<Query> queryList = Arrays.stream(clazz.getMethods())
-        .map(method -> createQuery(method.getName(), method.getDeclaringClass().getName(), method.getParameterTypes())).toList();
+        .map(method -> createQuery(method.getName(), method.getReturnType().getSimpleName(), method.getParameterTypes())).toList();
     return new Queries(queryList);
   }
 
