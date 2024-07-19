@@ -18,9 +18,8 @@ public class MethodParser implements Parser{
     String whereClauses = getWhereClauses(methodName);
 
     for (Clause clause : splitParts(whereClauses)) {
-      CombineKeyword keyword = clause.token();
       if (clause.isNotFirst()) {
-        query.append(" ").append(keyword.name());
+        query.append(" ").append(clause.getKeywordName());
       }
       query.append(clause.toQueryString());
     }

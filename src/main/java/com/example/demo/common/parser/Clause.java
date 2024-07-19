@@ -9,4 +9,8 @@ public record Clause(CombineKeyword token, Operator operator, String column) {
   public String toQueryString(){
    return " " + column.toLowerCase() + " " + operator.getQueryKeyword();
   }
+
+  public String getKeywordName(){
+    return token.name();
+  }
 }
