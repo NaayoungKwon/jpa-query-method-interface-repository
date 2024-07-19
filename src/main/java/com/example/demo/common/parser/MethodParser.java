@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MethodParser implements Parser{
 
-  public String parse(String methodName, Class<?>[] parameterTypes) {
+  public String parse(String methodName, String tableName, Class<?>[] parameterTypes) {
     return null;
   }
 

@@ -35,12 +35,12 @@ public class QueryMethodCache {
 
   private Queries createQueries(Class<? extends MyJpaRepository> clazz){
     List<Query> queryList = Arrays.stream(clazz.getMethods())
-        .map(method -> createQuery(method.getName(), method.getParameterTypes())).toList();
+        .map(method -> createQuery(method.getName(), method.getDeclaringClass().getName(), method.getParameterTypes())).toList();
     return new Queries(queryList);
   }
 
-  private Query createQuery(String methodName, Class<?>[] parameterTypes){
-    String queryStr = parser.parse(methodName, parameterTypes);
+  private Query createQuery(String methodName, String tableName, Class<?>[] parameterTypes){
+    String queryStr = parser.parse(methodName, tableName, parameterTypes);
     return new Query(methodName, queryStr);
   }
 
