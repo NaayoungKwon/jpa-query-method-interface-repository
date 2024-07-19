@@ -33,6 +33,7 @@ public class QueryMethodAdvice implements MethodInterceptor {
         .map(query -> query.mergeToParam(invocation.getArguments()))
         .orElse(null);
     log.info("query : {}", finalQuery);
+    // Object result = db.execute(query);
 
     return method.getReturnType().getConstructor().newInstance();
   }
